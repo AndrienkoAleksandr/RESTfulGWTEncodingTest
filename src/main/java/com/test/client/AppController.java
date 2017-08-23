@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.http.client.*;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.inject.Inject;
 
 import java.util.HashMap;
@@ -54,16 +53,21 @@ public class AppController {
     }
 
     private void doRequest(final char character, final Map<Integer, Character> unhandedChars, final CallBack callBack) {
-        GWT.log(character + " url: " + BASE_URL +"/" + character + " index: " + (int)character);
+        GWT.log(character + " index: " + (int)character);
         try {
 //            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL +"/" + character);
 //            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL +"/" + URL.encode(character + ""));
 //            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL +"/" + UriUtils.encode(character + ""));
-            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL +"/" + (UriUtils.encodeAllowEscapes(character + "")));
+//            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL +"/" + (UriUtils.encodeAllowEscapes(character + "")));
 //            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL +"/" + (URL.encodePathSegment(character + "")));
 
+//            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL + "/query?msg=" + character);
+            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL + "/result/query" + (URL.encodeQueryString(character + "")));
+//            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL +"/query?msg=" + (UriUtils.encodeAllowEscapes(character + "")));
+//            final RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, BASE_URL + "/query?msg=" + (URL.encodePathSegment(character + "")));
+
             requestBuilder.sendRequest(null, new RequestCallback() {
-//                @Override
+                @Override
                 public void onResponseReceived(Request request, Response response) {
                     String responseText = response.getText();
                     if (responseText.equals("pong") || !responseText.equals(valueOf(character))) {
